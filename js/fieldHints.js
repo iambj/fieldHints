@@ -21,39 +21,30 @@ var fh = {
             $curField.hint = tmpField;
             //pass along the hint as a member of the field.
             //so we can access it from the functions.
-            $curField.addEventListener('click', this.fadeIn);
+            $curField.addEventListener('focus', this.fadeIn);
             $curField.addEventListener('blur', this.fadeOut);
 
         };
     },
 
-    aniFPS : 42, // 24 fps, (42 24milliseconds in 1 second)
-    aniDelta : 2, // increase the spead of the animation.
+    aniFPS : (1000/48), // 24 fps, 1000 milliseconds in a second.
+    aniDelta : 5, // increase the spead of the animation.
 
     fadeIn : function(){
         hintNode = this.hint;
-        //if(hintNode.isAnimating != true){
-            //this.clearInterval(this.hint.fadeOutTimer);
-            //console.log(this.hint.fadeOutTimer);
-
             if(hintNode.fadeOutTimer){
                 window.clearInterval(hintNode.fadeOutTimer);
             };
-            //srt of works. needs to go in reveres eand forwares.
-            //gets stuck
-
             hintNode.isAnimating = true;
-            //set a local var for
             fade = {
                 hint : hintNode,
                 count : 0,
                 timer : setInterval(function(){
                     fade.hint.fadeInTimer = fade.timer;
                     if(Number(fade.hint.style.opacity) >= 1.0){
-                        console.log("stopping fading")
                         this.clearInterval(fade.timer);
                         fade.hint.isAnimating = false;
-
+                        fade.hint.style.opacity = 1; //incase it goes over 1;
                         return;
                     };
                     fade.hint.style.opacity = Number(fade.hint.style.opacity) + fh.aniDelta/100;
@@ -78,6 +69,7 @@ var fh = {
                     if(fade.hint.style.opacity <= 0.0){
                         this.clearInterval(fade.timer);
                         fade.hint.isAnimating = false;
+                        fade.hint.style.opacity = 0; //incase it goes under 0;
                         return;
                     };
                     fade.hint.style.opacity = Number(fade.hint.style.opacity) - fh.aniDelta/100;
@@ -88,5 +80,3 @@ var fh = {
 
 
 }
-
-fh.setup();

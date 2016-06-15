@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/JavaScript" src="js/fieldHints.js"/></script>
+    <style>
+        .fieldHint{
+            opacity: 0; /*should always start of hidden. The script will
+                        //create a new div and delate it. The hint div
+                        //should be created using position: absolute;*/
+
+            display: inline-block; /*appear next to the input.*/
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" data-hint="mm/dd/yyyy" class="hintMe" />
+
+
+    <script>
+        fh.setup();
+    </script>
+
+</body>
+</html>
