@@ -20,8 +20,7 @@ var fh = {
         console.log(fh.hints);
     },
 
-    ////
-    hints : [], //fh.fields holds all the inputs that will have hints.
+    hints : [], //fh.hints holds all the inputs that will have hints.
                  //this makes it a member of fh (fieldHints) which allows us to
                  //iterate over it from the web page.
 
@@ -32,7 +31,6 @@ var fh = {
         hintText : "", //the text for inside the hint.
         timer : null
     },
-
 
     setup : function(){
         //Runs by default. Searches through all the nodes on the page
@@ -55,11 +53,6 @@ var fh = {
             hint.hintRef = hintDiv; //the cute little hint box to reference later.
             fh.hints.push(hint); //add hints to the fh.hints container. Just incase.
             //Add click and blur event listeners to the current node (input)
-            var obj = {
-                handleEvent : function(){
-                    fh.fadeIn(curNode, hint);
-                }
-            }
             curNode.hint = hint; //gives the DOM Node the nice little object
                                 // that is the hint.
             curNode.addEventListener('focus', fh.fadeIn);
@@ -68,11 +61,10 @@ var fh = {
     },
 
     fadeIn : function(){
-        console.log(this.hint.timer);
         if(this.hint.timer){
-            console.log("killing");
             window.clearInterval(this.hint.timer);
             this.hint.hintRef.style.opacity = 0;
+
             this.hint.timer = null;
             return;
         };
@@ -86,6 +78,7 @@ var fh = {
                     step.targ.hintRef.style.opacity = 1; //incase it goes over 1;
                     return;
                 }else{
+                    step.targ.hintRef.style.display = "inline-block";
                     step.targ.hintRef.style.opacity = Number(step.targ.hintRef.style.opacity) + fh.aniDelta/100;
                 };
             }, fh.aniFPS),
@@ -101,17 +94,16 @@ var fh = {
         var step = {
             targ : this.hint,
             fade :  setInterval(function(){
-                //console.log(step.targ.hintRef);
                 step.targ.timer = step.fade;
                 if(Number(step.targ.hintRef.style.opacity) <= 0){
                     window.clearInterval(step.targ.timer);
                     step.targ.timer = null;
-                    step.targ.hintRef.style.opacity = 0; //incase it goes over 1;
+                    step.targ.hintRef.style.opacity = 0; //incase it goes under 0;
+                    step.targ.hintRef.style.display = "none";
                     return;
                 }else{
                     step.targ.hintRef.style.opacity = Number(step.targ.hintRef.style.opacity) - fh.aniDelta/100;
                 }
-
             }, fh.aniFPS),
         };
     },
